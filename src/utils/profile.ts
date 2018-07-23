@@ -17,7 +17,7 @@ class Profile {
 
 export class ProfileService {
     private static context: vscode.ExtensionContext;
-    private static prefix = 'wylio_profile';
+    private static prefix = 'wylio_profile_';
     private static currentProfile = 'wylio_current_profile';
     private static profiles = 'wylio_profiles';
 
@@ -26,9 +26,9 @@ export class ProfileService {
     }
 
     public static getCurrentProfile (): Profile|undefined{
-        let currentProfileName = ProfileService.context.globalState.get (ProfileService.currentProfile);
+        let currentProfileName: string|undefined = ProfileService.context.globalState.get (ProfileService.currentProfile);
         if (currentProfileName){
-            return ProfileService.context.globalState.get (ProfileService.prefix + currentProfileName, undefined);
+            return ProfileService.context.globalState.get (currentProfileName, undefined);
         }
         else{
             return undefined;

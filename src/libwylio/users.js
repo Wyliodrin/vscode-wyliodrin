@@ -14,7 +14,8 @@ module.exports = function (httpService)
         },
 
         login: async function (params){
-            httpService.setEndpoint (param.host);
+            console.log ('api');
+            httpService.setEndpoint (params.host);
             let response = await http.post ('/user/login', params);
             if (response.data && response.data.token){
                 httpService.setToken (response.data.token);

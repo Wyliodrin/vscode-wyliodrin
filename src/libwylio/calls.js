@@ -26,5 +26,5 @@ exports.init = function (endpoint, token){
 }
 
 exports.get = function (){
-    calls;
+    return calls;
 }

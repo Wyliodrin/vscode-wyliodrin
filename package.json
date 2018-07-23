@@ -1,6 +1,6 @@
 {
-    "name": "wylio",
-    "displayName": "wylio",
+    "name": "vscode-wyliodrin",
+    "displayName": "vscode-wyliodrin",
     "description": "",
     "version": "0.0.1",
     "publisher": "wyliodrin",
@@ -13,7 +13,8 @@
     "activationEvents": [
         "onCommand:wylio.application_new",
         "onCommand:wylio.login",
-        "onCommand:wylio.logout"
+        "onCommand:wylio.logout",
+        "onCommand:wylio.application_list"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -21,6 +22,11 @@
             {
                 "command": "wylio.application_new",
                 "title": "New Application",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.application_list",
+                "title": "List all applications.",
                 "category": "Wylio"
             },
             {
