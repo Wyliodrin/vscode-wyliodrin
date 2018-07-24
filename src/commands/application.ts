@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-let calls = require ('../libwylio/calls');
+import {Libwylio} from '../utils/libwylio';
 vscode.commands.registerCommand ('wylio.application_new', async ()=>{
     console.log ('in function');
 //     let id = await vscode.window.showInputBox ({prompt: 'Application id'});
@@ -24,12 +24,8 @@ vscode.commands.registerCommand ('wylio.application_new', async ()=>{
 });
 
 vscode.commands.registerCommand ('wylio.application_list', async ()=>{
-    let api = calls.get();
-    if (api){
+    Libwylio.get (async function (api){
         let apps = await api.apps.list ();
         console.log (apps);
-    }
-    else{
-        vscode.window.showErrorMessage ('No profile selected. Log in or select a profile.');
-    }
+    });
 });

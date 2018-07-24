@@ -14,7 +14,8 @@
         "onCommand:wylio.application_new",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
-        "onCommand:wylio.application_list"
+        "onCommand:wylio.application_list",
+        "onCommand:wylio.profile_delete"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -36,7 +37,12 @@
             },
             {
                 "command": "wylio.logout",
-                "title": "Log out and delete profile",
+                "title": "Log out",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.profile_delete",
+                "title": "Delete profile",
                 "category": "Wylio"
             }
         ]

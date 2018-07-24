@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+
 class Profile {
     token: string;
     username: string;
@@ -62,10 +63,6 @@ export class ProfileService {
         return ProfileService.context.globalState.get (ProfileService.profiles, []);
     }
 
-    public static deleteProfile (name: string){
-        ProfileService.context.globalState.update (ProfileService.prefix + name, null);
-    }
-
     public static getProfile (name: string): Profile | undefined{
         // let profile: Profile | undefined = ProfileService.context.globalState.get (ProfileService.prefix + name);
         // if (profile){
@@ -81,6 +78,20 @@ export class ProfileService {
             currentProfile.token = "";
             ProfileService.context.globalState.update (ProfileService.prefix + currentProfile.name, currentProfile);
             ProfileService.context.globalState.update (ProfileService.currentProfile, "");
+        }
+    }
+
+    public static delete (profileName: string){
+        let currentProfile = ProfileService.getCurrentProfile ();
+        if (currentProfile &&  currentProfile.name === profileName){
+            ProfileService.context.globalState.update (ProfileService.currentProfile, "");
+        }
+        ProfileService.context.globalState.update (ProfileService.prefix + profileName, undefined);
+        let profiles: string[] | undefined = ProfileService.context.globalState.get (ProfileService.profiles);
+        if (profiles){
+            let index = profiles.indexOf (profileName);
+            profiles.splice (index, 1);
+            ProfileService.context.globalState.update (ProfileService.profiles, profiles);
         }
     }
 }

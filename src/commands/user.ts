@@ -81,8 +81,6 @@ vscode.commands.registerCommand ('wylio.login', async ()=>{
 });
 
 vscode.commands.registerCommand ('wylio.logout', async ()=>{
-    // let existingProfiles: string[] = ProfileService.getProfiles ();
-    // let selected = await vscode.window.showQuickPick (existingProfiles, {canPickMany: false});
     if (api){
         let usersApi = api.users;
         let response = await usersApi.logout ();
@@ -95,5 +93,14 @@ vscode.commands.registerCommand ('wylio.logout', async ()=>{
     }
     else{
         vscode.window.showErrorMessage ('You are not logged in.');
+    }
+});
+
+vscode.commands.registerCommand ('wylio.profile_delete', async ()=>{
+    let existingProfiles: string[] = ProfileService.getProfiles ();
+    let selected = await vscode.window.showQuickPick (existingProfiles, {canPickMany: false});
+    if (selected){
+        ProfileService.delete (selected);
+        vscode.window.showInformationMessage ('Profile deleted successfully.');
     }
 });
