@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {ProfileService} from '../utils/profile';
-let api = require ('../libwylio/calls');
+let apiService = require ('../libwylio/calls');
+let api = apiService.get();
 
 vscode.commands.registerCommand ('wylio.login', async ()=>{
     let existingProfiles: string[] = ProfileService.getProfiles ();
@@ -21,16 +22,13 @@ vscode.commands.registerCommand ('wylio.login', async ()=>{
                         if (profile)
                         {
                             profile = (profile.length > 0)? profile: 'default';
-                            api = api.init (host);
-                            console.log (api);
+                            api = apiService.init (host);
                             let usersApi = api.users;
                             let params = {
                                 username: username,
                                 password: password,
                                 host:host
                             };
-                            console.log (params);
-                            console.log (JSON.stringify(usersApi));
                             let token = await usersApi.login (params);
                             if (token){
                                 ProfileService.newProfile (profile, username, token, host);
@@ -46,31 +44,56 @@ vscode.commands.registerCommand ('wylio.login', async ()=>{
             }
         }
         else{
-            ProfileService.setActiveProfile (selected);
-            console.log (selected);
-            let currentProfile = ProfileService.getCurrentProfile();
-            console.log (currentProfile);
-            if (currentProfile){
-                api.init (currentProfile.host, currentProfile.token);
-                vscode.window.showInformationMessage ('Profile selected.');
+            let selectedProfile = ProfileService.getProfile (selected);
+            if (selectedProfile){
+                if (selectedProfile.token.length === 0){
+                    api = apiService.init (selectedProfile.host);
+                    let password = await vscode.window.showInputBox ({prompt: 'Password', password: true});
+                    if (password && password.length > 0){
+                        let usersApi = api.users;
+                        let params = {
+                            username: selectedProfile.username,
+                            password: password,
+                            host: selectedProfile.host
+                        };
+                        let token = await usersApi.login (params);
+                        if (token){
+                            ProfileService.updateToken (selectedProfile, token);
+                            ProfileService.setActiveProfile (selectedProfile.name);
+                            vscode.window.showInformationMessage ('Logged in and selected profile.');
+                        }
+                        else{
+                            vscode.window.showErrorMessage ('Could not login.');
+                        }  
+                    }
+                }
+                else{
+                    api = apiService.init (selectedProfile.host, selectedProfile.token);
+                    ProfileService.setActiveProfile (selected);
+                    vscode.window.showInformationMessage ('Profile selected.');
+                }
             }
             else{
-                vscode.window.showErrorMessage ('Could not select profile.');
+                vscode.window.showErrorMessage ('Profile does not exist.');
             }
         }
     }
 });
 
 vscode.commands.registerCommand ('wylio.logout', async ()=>{
-    api = api.get();
+    // let existingProfiles: string[] = ProfileService.getProfiles ();
+    // let selected = await vscode.window.showQuickPick (existingProfiles, {canPickMany: false});
     if (api){
-        
+        let usersApi = api.users;
+        let response = await usersApi.logout ();
+        if (response){
+            ProfileService.logout();
+            vscode.window.showInformationMessage ('Logout successful.')
+        }
+        else
+            vscode.window.showErrorMessage ('Could not logout');
     }
-    let existingProfiles: string[] = ProfileService.getProfiles ();
-    let selected = await vscode.window.showQuickPick (existingProfiles, {canPickMany: false});
-    if (selected){
-        let index = existingProfiles.indexOf (selected);
-        existingProfiles.splice (index, 1);
-        ProfileService.deleteProfile (selected);
+    else{
+        vscode.window.showErrorMessage ('You are not logged in.');
     }
 });

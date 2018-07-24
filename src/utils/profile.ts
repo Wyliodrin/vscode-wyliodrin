@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-const api = require ('../libwylio/calls');
 
 class Profile {
     token: string;
@@ -27,7 +26,7 @@ export class ProfileService {
 
     public static getCurrentProfile (): Profile|undefined{
         let currentProfileName: string|undefined = ProfileService.context.globalState.get (ProfileService.currentProfile);
-        if (currentProfileName){
+        if (currentProfileName && currentProfileName.length > 0){
             return ProfileService.context.globalState.get (currentProfileName, undefined);
         }
         else{
@@ -39,10 +38,14 @@ export class ProfileService {
         let profile = new Profile (name, username, token, host);
         ProfileService.context.globalState.update (ProfileService.prefix + name, profile);
         let existingProfiles = ProfileService.getProfiles();
-        console.log (existingProfiles);
         existingProfiles.push (name);
         ProfileService.context.globalState.update (ProfileService.profiles, existingProfiles);
 
+    }
+
+    public static updateToken (profile: Profile, token: string){
+        profile.token = token;
+        ProfileService.context.globalState.update (ProfileService.prefix + profile.name, profile);
     }
 
     public static exists (name: string){
@@ -61,5 +64,23 @@ export class ProfileService {
 
     public static deleteProfile (name: string){
         ProfileService.context.globalState.update (ProfileService.prefix + name, null);
+    }
+
+    public static getProfile (name: string): Profile | undefined{
+        // let profile: Profile | undefined = ProfileService.context.globalState.get (ProfileService.prefix + name);
+        // if (profile){
+        //     return new Profile (profile.name, profile.username, profile.token, profile.host);
+        // }
+        // return undefined;
+        return ProfileService.context.globalState.get (ProfileService.prefix + name);
+    }
+
+    public static logout (){
+        let currentProfile = ProfileService.getCurrentProfile ();
+        if (currentProfile){
+            currentProfile.token = "";
+            ProfileService.context.globalState.update (ProfileService.prefix + currentProfile.name, currentProfile);
+            ProfileService.context.globalState.update (ProfileService.currentProfile, "");
+        }
     }
 }

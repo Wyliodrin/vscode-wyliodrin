@@ -1,4 +1,4 @@
-module.exports = function (httpService)
+module.exports = function (httpService, logoutCalls)
 {
     let http = httpService.http;
     
@@ -6,6 +6,7 @@ module.exports = function (httpService)
         logout: async function (){
             let response = await http.get ('/user/logout');
             if (response.data && response.data.err === 0){
+                logoutCalls ();
                 return true;
             }
             else{
@@ -14,7 +15,6 @@ module.exports = function (httpService)
         },
 
         login: async function (params){
-            console.log ('api');
             httpService.setEndpoint (params.host);
             let response = await http.post ('/user/login', params);
             if (response.data && response.data.token){

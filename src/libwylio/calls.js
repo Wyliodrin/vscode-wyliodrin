@@ -1,14 +1,18 @@
-let calls;
-exports.init = function (endpoint, token){
+let calls = null;
+
+function logout (){
+    calls = null;
+}
+module.exports.init = function (endpoint, token){
     endpoint = endpoint + '/api/v1';
     let httpService = require ('./http')(endpoint);
-    const users = require ('./users')(httpService);
-    const clusters = require ('./clusters')(httpService.http);
-    const products = require ('./products')(httpService.http);
-    const apps = require ('./applications')(httpService.http);
-    const deploy = require ('./deploy')(httpService.http);
-    const settings = require ('./settings')(httpService.http);
-    const projects = require ('./projects')(httpService.http);
+    let users = require ('./users')(httpService, logout);
+    let clusters = require ('./clusters')(httpService.http);
+    let products = require ('./products')(httpService.http);
+    let apps = require ('./applications')(httpService.http);
+    let deploy = require ('./deploy')(httpService.http);
+    let settings = require ('./settings')(httpService.http);
+    let projects = require ('./projects')(httpService.http);
     if (token){
         httpService.setToken (token);
     }
@@ -21,10 +25,9 @@ exports.init = function (endpoint, token){
         settings: settings,
         projects: projects
     };
-
     return calls;
 }
 
-exports.get = function (){
+module.exports.get = function (){
     return calls;
 }

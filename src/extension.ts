@@ -10,11 +10,9 @@ export function activate(context: vscode.ExtensionContext) {
     ProfileService.setContext (context);
     let currentProfile = ProfileService.getCurrentProfile ();
     if (currentProfile){
-        ProfileService.setActiveProfile (currentProfile.name);
-        vscode.window.showInformationMessage ('Using profile ' + currentProfile);
+        vscode.window.showInformationMessage ('Using profile ' + currentProfile.name);
         api.init (currentProfile.host, currentProfile.token);
     }
-
     require ('./commands/application');
     require ('./commands/user');
     // Use the console to output diagnostic information (console.log) and errors (console.error)
