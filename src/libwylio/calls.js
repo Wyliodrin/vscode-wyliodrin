@@ -5,14 +5,14 @@ function logout (){
 }
 module.exports.init = function (endpoint, token){
     endpoint = endpoint + '/api/v1';
-    let httpService = require ('./http')(endpoint);
-    let users = require ('./users')(httpService, logout);
-    let clusters = require ('./clusters')(httpService.http);
-    let products = require ('./products')(httpService.http);
-    let apps = require ('./applications')(httpService.http);
-    let deploy = require ('./deploy')(httpService.http);
-    let settings = require ('./settings')(httpService.http);
-    let projects = require ('./projects')(httpService.http);
+    let httpService = require ('./api-calls/http')(endpoint);
+    let users = require ('./api-calls/users')(httpService, logout);
+    let clusters = require ('./api-calls/clusters')(httpService.http);
+    let products = require ('./api-calls/products')(httpService.http);
+    let apps = require ('./api-calls/applications')(httpService.http);
+    let deploy = require ('./api-calls/deploy')(httpService.http);
+    let settings = require ('./api-calls/settings')(httpService.http);
+    //EXISTA DACA E NEVOIE let projects = require ('./api-calls/projects')(httpService.http);
     if (token){
         httpService.setToken (token);
     }
@@ -22,8 +22,7 @@ module.exports.init = function (endpoint, token){
         products: products,
         apps: apps,
         deploy: deploy,
-        settings: settings,
-        projects: projects
+        settings: settings
     };
     return calls;
 }

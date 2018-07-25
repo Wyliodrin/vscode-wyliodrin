@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import {ProfileService} from '../utils/profile';
+import { Libwylio } from '../utils/libwylio';
 let apiService = require ('../libwylio/calls');
 let api = apiService.get();
 
@@ -99,6 +100,12 @@ vscode.commands.registerCommand ('wylio.logout', async ()=>{
 vscode.commands.registerCommand ('wylio.profile_delete', async ()=>{
     let existingProfiles: string[] = ProfileService.getProfiles ();
     let selected = await vscode.window.showQuickPick (existingProfiles, {canPickMany: false});
+    let currentProfile = ProfileService.getCurrentProfile();
+    if (currentProfile && currentProfile.name === selected){
+        Libwylio.get (async (api)=>{
+            await api.users.logout ();
+        });
+    }
     if (selected){
         ProfileService.delete (selected);
         vscode.window.showInformationMessage ('Profile deleted successfully.');

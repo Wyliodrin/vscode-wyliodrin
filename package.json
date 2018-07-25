@@ -12,9 +12,11 @@
     ],
     "activationEvents": [
         "onCommand:wylio.application_new",
+        "onCommand:wylio.application_list",
+        "onCommand:wylio.application_delete",
+        "onCommand:wylio.application_versions",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
-        "onCommand:wylio.application_list",
         "onCommand:wylio.profile_delete"
     ],
     "main": "./out/extension",
@@ -27,7 +29,17 @@
             },
             {
                 "command": "wylio.application_list",
-                "title": "List all applications.",
+                "title": "Applications info",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.application_delete",
+                "title": "Delete application",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.application_versions",
+                "title": "List application version",
                 "category": "Wylio"
             },
             {
@@ -62,6 +74,7 @@
         "@types/mocha": "^2.2.42"
     },
     "dependencies": {
-        "axios": "^0.18.0"
+        "axios": "^0.18.0",
+        "lodash": "^4.17.10"
     }
 }

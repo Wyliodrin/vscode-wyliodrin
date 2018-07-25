@@ -2,7 +2,6 @@ const axios = require ('axios');
 
 let httpInstance;
 module.exports = function (endpoint){
-    console.log ('new instanceeeeeeeeeeeeee');
     let token = null;
 
     function axiosInstance (endpoint){
@@ -12,8 +11,6 @@ module.exports = function (endpoint){
         // Add a request interceptor
         instance.interceptors.request.use(function (config) {
             // Do something before request is sent
-            console.log ('in interceptor');
-            console.log (token);
             if (token)
                 config.headers.Authorization = 'Bearer ' + token;
             return config;
@@ -39,10 +36,7 @@ module.exports = function (endpoint){
             httpInstance = axiosInstance (endpoint);
         },
         setToken: function (tok){
-            console.log ('before'); console.log (token);
             token = tok;
-            console.log ('token set');
-            console.log (token);
         }
     };
 }
