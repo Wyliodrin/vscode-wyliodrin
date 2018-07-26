@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import {Libwylio} from '../utils/libwylio';
 let _ = require ('lodash');
+const semver = require ('semver');
 vscode.commands.registerCommand ('wylio.application_new', async ()=>{
     Libwylio.get (async (api)=>{
         let id = await vscode.window.showInputBox ({prompt: 'Application id', placeHolder: 'com.domain.application'});
@@ -199,19 +200,49 @@ vscode.commands.registerCommand ('wylio.application_undeploy', async ()=>{
         }
     });
 });
-
-// vscode.commands.registerCommand ('wylio.application_version_update', async ()=>{
-//     Libwylio.get (async (api)=>{
-//         let apps = await api.apps.list();
-//         if (apps){
-//             let appList = _.map (apps, 'appId');
-//             let id = await vscode.window.showQuickPick (appList, {canPickMany: false});
-//             if (id){
-//                 let versions = await api.apps.versions (id);
-//                 if (versions){
-//                     console.log (versions);
-//                 }
-//             }
-//         }
-//     });
-// });
+//TEST WITH NEW SERVER
+vscode.commands.registerCommand ('wylio.application_version_update', async ()=>{
+    Libwylio.get (async (api)=>{
+        let apps = await api.apps.list();
+        if (apps){
+            let appList = _.map (apps, 'appId');
+            let id = await vscode.window.showQuickPick (appList, {canPickMany: false});
+            if (id){
+                let versions = await api.apps.versions (id);
+                if (versions){
+                    let versionList: vscode.QuickPickItem[] = _.map (versions, (v: any)=> {
+                        return {
+                            label: v.id,
+                            detail: v.semver,
+                            description: v.text
+                        };
+                    });
+                    let version = await vscode.window.showQuickPick (versionList, {canPickMany: false});
+                    if (version){
+                        let semanticVersion = await vscode.window.showInputBox ({prompt: 'Semantic version', value: '1.0.0'});
+                        if (semanticVersion){
+                            semanticVersion = semver.valid (semver.coerce (semanticVersion));
+                            if (!semanticVersion){
+                                vscode.window.showErrorMessage ('Invalid semantic version.');
+                            }
+                            let text = await vscode.window.showInputBox ({prompt: 'Version description', value: version.description});
+                            if (text && text.length > 0){
+                                let params = {
+                                    semver: semanticVersion,
+                                    text: text
+                                }
+                                let response = await api.apps.editVersion (id, version.label, params);
+                                if (response){
+                                    vscode.window.showInformationMessage ('Application updated successfully.');
+                                }
+                                else{
+                                    vscode.window.showErrorMessage ('Could not update application.');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+});

@@ -17,6 +17,7 @@
         "onCommand:wylio.application_versions",
         "onCommand:wylio.application_deploy",
         "onCommand:wylio.application_undeploy",
+        "onCommand:wylio.application_version_update",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -55,6 +56,11 @@
                 "category": "Wylio"
             },
             {
+                "command": "wylio.application_version_update",
+                "title": "Update application version",
+                "category": "Wylio"
+            },
+            {
                 "command": "wylio.login",
                 "title": "Log in or select profile",
                 "category": "Wylio"
@@ -87,6 +93,7 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
-        "lodash": "^4.17.10"
+        "lodash": "^4.17.10",
+        "semver": "^5.5.0"
     }
 }

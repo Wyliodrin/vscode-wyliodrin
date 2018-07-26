@@ -18,6 +18,14 @@ module.exports = function (http)
             return null;
         },
 
+        editVersion: async function (appId, version, params){
+            let response = await http.post ('/app/version/'+appId+'/'+version, params);
+            if (response.data && response.data.err === 0){
+                return true;
+            }
+            return false;
+        },
+
         new: async function (params){
             let response = await http.post ('/app/create', params);
             if (response.data && response.data.err === 0){
