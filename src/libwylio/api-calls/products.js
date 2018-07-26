@@ -81,5 +81,15 @@ module.exports = function (http)
             }
             return false;
         },
+
+        activate: async function (params){
+            let response = await http.post ('/product/activate/'+params.productId, params);
+            if (response.data && response.data.err === 0){
+                return true;
+            }
+            return false;
+        },
+
+        actions: ['restart', 'distribute']
     };
 };

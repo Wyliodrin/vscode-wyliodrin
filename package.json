@@ -21,6 +21,12 @@
         "onCommand:wylio.cluster_new",
         "onCommand:wylio.cluster_list",
         "onCommand:wylio.cluster_delete",
+        "onCommand:wylio.product_provision",
+        "onCommand:wylio.product_list",
+        "onCommand:wylio.product_delete",
+        "onCommand:wylio.product_activate",
+        "onCommand:wylio.product_schedule",
+        "onCommand:wylio.product_unschedule",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -76,6 +82,36 @@
             {
                 "command": "wylio.cluster_delete",
                 "title": "Delete cluster",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_provision",
+                "title": "Provision product",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_list",
+                "title": "Products info",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_delete",
+                "title": "Delete product",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_activate",
+                "title": "Activate product",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_schedule",
+                "title": "Schedule product action",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.product_unschedule",
+                "title": "Unschedule product action",
                 "category": "Wylio"
             },
             {
