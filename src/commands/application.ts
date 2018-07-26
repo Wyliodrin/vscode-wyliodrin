@@ -101,6 +101,19 @@ vscode.commands.registerCommand ('wylio.application_versions', async ()=>{
 });
 
 vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
+    async function addParameter (params: any){
+        let add = await vscode.window.showQuickPick (['add parameter', 'finish'], {canPickMany: false});
+        if (add && add === 'add parameter'){
+            let parameterName = await vscode.window.showInputBox ({prompt: 'Name of the parameter used to start the application container'});
+            if (parameterName && parameterName.length > 0){
+                let parameterValue = await vscode.window.showInputBox ({prompt: 'Parameter values, Separated by ;'});
+                if (parameterValue){
+                    params[parameterName] = parameterValue.split (';');
+                }
+            }
+            await addParameter(params);
+        }
+    }
     Libwylio.get (async (api)=>{
         let apps = await api.apps.list();
         if (apps){
@@ -108,7 +121,6 @@ vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
             let id = await vscode.window.showQuickPick (appList, {canPickMany: false});
             if (id){
                 let clusters = await api.clusters.list ();
-                console.log (clusters);
                 if (clusters){
                     let clusterList = _.map (clusters, (c: any)=> c.name + ' ('+c.clusterId+')');
                     let cluster = await vscode.window.showQuickPick (clusterList, {canPickMany: false});
@@ -117,16 +129,31 @@ vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
                         clusterId = clusterId.substring (0, clusterId.length-1);
                         let type = await vscode.window.showQuickPick (api.deploymentTypes, {canPickMany: false});
                         if (type){
-                            let version = await vscode.window.showInputBox ({prompt: 'Application version', placeHolder: '1'});
-                            if (version && version.length > 0){
-                                let rollback = await vscode.window.showInputBox ({prompt: 'Rollback versions', placeHolder: '0'});
-                                if (rollback && rollback.length > 0){
+                            let version = await vscode.window.showInputBox ({prompt: 'Application version', value: '1'});
+                            if (version){
+                                let rollback = await vscode.window.showInputBox ({prompt: 'Rollback versions', value: '0'});
+                                if (rollback){
                                     let network = await vscode.window.showQuickPick (api.deploymentNetwork, {canPickMany: false});
                                     if (network){
                                         let privileged = await vscode.window.showQuickPick (['yes', 'no'], {placeHolder: 'Run as privileged application?',canPickMany: false});
                                         if (privileged){
-                                            addParameter();
-                                            //TODO - pass list to function
+                                            let parameters = {};
+                                            await addParameter(parameters);
+                                            let params = {
+                                                appId: id,
+                                                clusterId: clusterId,
+                                                version: version,
+                                                network: network,
+                                                rollback: (rollback === '0')? null: rollback,
+                                                privileged: (privileged === 'yes')? true: false,
+                                                type: type,
+                                                parameters: parameters
+                                            };
+                                            let response = api.apps.deploy (params);
+                                            if (response)
+                                                vscode.window.showInformationMessage ('Application deployed successfully.');
+                                            else
+                                                vscode.window.showErrorMessage ('Could not deploy application');
                                         }
                                     }
                                 }
@@ -138,15 +165,3 @@ vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
         }
     });
 });
-
-async function addParameter (){
-    let add = await vscode.window.showQuickPick (['add parameter', 'finish'], {canPickMany: false});
-    if (add && add === 'add parameter'){
-        let parameterName = await vscode.window.showInputBox ({prompt: 'Name of the parameter used to start the application container'});
-        if (parameterName && parameterName.length > 0){
-            let parameterValue = await vscode.window.showInputBox ({prompt: 'Parameter values, Separated by ;'});
-            //TODO - parse parameters and add to list
-        }
-        addParameter();
-    }
-}
