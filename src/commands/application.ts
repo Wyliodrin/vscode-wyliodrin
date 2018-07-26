@@ -122,11 +122,14 @@ vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
             if (id){
                 let clusters = await api.clusters.list ();
                 if (clusters){
-                    let clusterList = _.map (clusters, (c: any)=> c.name + ' ('+c.clusterId+')');
+                    let clusterList: vscode.QuickPickItem[] = _.map (clusters, (c: any)=> {
+                        return {
+                            label: c.name,
+                            description: c.clusterId}
+                    });
                     let cluster = await vscode.window.showQuickPick (clusterList, {canPickMany: false});
                     if (cluster){
-                        let clusterId = cluster.split ('(')[1];
-                        clusterId = clusterId.substring (0, clusterId.length-1);
+                        let clusterId = cluster.description;
                         let type = await vscode.window.showQuickPick (api.deploymentTypes, {canPickMany: false});
                         if (type){
                             let version = await vscode.window.showInputBox ({prompt: 'Application version', value: '1'});
@@ -165,3 +168,50 @@ vscode.commands.registerCommand ('wylio.application_deploy', async ()=>{
         }
     });
 });
+
+vscode.commands.registerCommand ('wylio.application_undeploy', async ()=>{
+    Libwylio.get (async (api)=>{
+        let apps = await api.apps.list();
+        if (apps){
+            let appList = _.map (apps, 'appId');
+            let id = await vscode.window.showQuickPick (appList, {canPickMany: false});
+            if (id){
+                let deployments = await api.deploy.list (id);
+                if (deployments){
+                    let deployList: vscode.QuickPickItem[] = _.map (deployments, (d: any)=> {
+                        return {
+                            label: d.appId + ':' + d.type + ':' + d.version,
+                            detail: d.target + ':' + d.id,
+                            description: d.deployId
+                        };
+                    });
+                    let deploy = await vscode.window.showQuickPick (deployList, {canPickMany: false});
+                    if (deploy){
+                        let deployId = deploy.description;
+                        let response = api.apps.undeploy (deployId);
+                        if (response)
+                            vscode.window.showInformationMessage ('Application undeployed successfully.');
+                        else
+                            vscode.window.showErrorMessage ('Could not undeploy application');
+                    }
+                }
+            }
+        }
+    });
+});
+
+// vscode.commands.registerCommand ('wylio.application_version_update', async ()=>{
+//     Libwylio.get (async (api)=>{
+//         let apps = await api.apps.list();
+//         if (apps){
+//             let appList = _.map (apps, 'appId');
+//             let id = await vscode.window.showQuickPick (appList, {canPickMany: false});
+//             if (id){
+//                 let versions = await api.apps.versions (id);
+//                 if (versions){
+//                     console.log (versions);
+//                 }
+//             }
+//         }
+//     });
+// });

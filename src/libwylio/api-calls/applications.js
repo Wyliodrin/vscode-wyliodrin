@@ -42,13 +42,8 @@ module.exports = function (http)
             return false;
         },
 
-        undeploy: async function (params){
-            let response = await http.post ('/app/undeploy/'+params.deployId, {
-                appId: params.appId,
-                type: params.type,
-                clusterId: params.clusterId,
-                productId: params.productId
-            });
+        undeploy: async function (deployId){
+            let response = await http.post ('/app/undeploy/'+deployId);
             if (response.data && response.data.err === 0){
                 return true;
             }

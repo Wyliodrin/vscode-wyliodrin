@@ -16,6 +16,7 @@
         "onCommand:wylio.application_delete",
         "onCommand:wylio.application_versions",
         "onCommand:wylio.application_deploy",
+        "onCommand:wylio.application_undeploy",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -46,6 +47,11 @@
             {
                 "command": "wylio.application_deploy",
                 "title": "Deploy application",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.application_undeploy",
+                "title": "Undeploy application",
                 "category": "Wylio"
             },
             {
