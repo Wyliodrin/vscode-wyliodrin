@@ -22,7 +22,9 @@ module.exports.init = function (endpoint, token){
         products: products,
         apps: apps,
         deploy: deploy,
-        settings: settings
+        settings: settings,
+        deploymentTypes: ['beta', 'production', 'development'],
+        deploymentNetwork: ['default', 'host']
     };
     return calls;
 }
