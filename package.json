@@ -18,6 +18,9 @@
         "onCommand:wylio.application_deploy",
         "onCommand:wylio.application_undeploy",
         "onCommand:wylio.application_version_update",
+        "onCommand:wylio.cluster_new",
+        "onCommand:wylio.cluster_list",
+        "onCommand:wylio.cluster_delete",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -58,6 +61,21 @@
             {
                 "command": "wylio.application_version_update",
                 "title": "Update application version",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.cluster_new",
+                "title": "New cluster",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.cluster_list",
+                "title": "Clusters info",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.cluster_delete",
+                "title": "Delete cluster",
                 "category": "Wylio"
             },
             {

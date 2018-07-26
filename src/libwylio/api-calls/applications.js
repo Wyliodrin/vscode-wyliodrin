@@ -88,6 +88,14 @@ module.exports = function (http)
                 return true;
             }
             return false;
+        },
+
+        deployerVersions: async function (platform){
+            let response = await http.get ('/app/versions/deployer/'+platform);
+            if (response.data && response.data.err === 0){
+                return response.data.versions;
+            }
+            return null;
         }
     };
 }
