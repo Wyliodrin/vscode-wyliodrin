@@ -12,7 +12,8 @@ module.exports.init = function (endpoint, token){
     let apps = require ('./api-calls/applications')(httpService.http);
     let deploy = require ('./api-calls/deploy')(httpService.http);
     let settings = require ('./api-calls/settings')(httpService.http);
-    let projects = require ('./project/project');
+    let projectApi = require ('./api-calls/settings')(httpService.http);
+    let projects = require ('./project/project')(users,apps, projectApi);
     //EXISTA DACA E NEVOIE let projects = require ('./api-calls/projects')(httpService.http);
     if (token){
         httpService.setToken (token);
@@ -26,7 +27,10 @@ module.exports.init = function (endpoint, token){
         settings: settings,
         deploymentTypes: ['beta', 'production', 'development'],
         deploymentNetwork: ['default', 'host'],
-        project: projects
+        project: projects,
+        firmwarePlatforms: ['e10', 'msp432'],
+        languages: ['nodejs', 'python'],
+        projectUI: ['noui', 'Xorg', 'electron']
     };
     return calls;
 }

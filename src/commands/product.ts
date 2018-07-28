@@ -100,8 +100,9 @@ vscode.commands.registerCommand ('wylio.product_list', async ()=>{
                     });
                     let product = await vscode.window.showQuickPick (productList, {canPickMany: false});
                     if (product){
+                        let prod = product;
                         let productInfo = _.find (products, (p: any)=>{
-                            return p.productId === product.description;
+                            return p.productId === prod.description;
                         });
                         vscode.window.showInformationMessage(JSON.stringify(productInfo, null, 3));
                     }

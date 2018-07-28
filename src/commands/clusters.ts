@@ -73,8 +73,9 @@ vscode.commands.registerCommand ('wylio.cluster_list', async ()=>{
             });
             let selectedCluster = await vscode.window.showQuickPick (clusterList, {canPickMany: false});
             if (selectedCluster){
+                let sc = selectedCluster;
                 let clusterInfo = _.find (clusters, (c: any)=>{
-                    return c.clusterId === selectedCluster.description;
+                    return c.clusterId === sc.description;
                 });
                 vscode.window.showInformationMessage(JSON.stringify(clusterInfo, null, 3));
             }
