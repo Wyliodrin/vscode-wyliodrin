@@ -27,6 +27,7 @@
         "onCommand:wylio.product_activate",
         "onCommand:wylio.product_schedule",
         "onCommand:wylio.product_unschedule",
+        "onCommand:wylio.project_init",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -115,6 +116,11 @@
                 "category": "Wylio"
             },
             {
+                "command": "wylio.project_init",
+                "title": "Init project",
+                "category": "Wylio"
+            },
+            {
                 "command": "wylio.login",
                 "title": "Log in or select profile",
                 "category": "Wylio"
@@ -147,6 +153,7 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
+        "fs-extra": "^7.0.0",
         "lodash": "^4.17.10",
         "semver": "^5.5.0"
     }

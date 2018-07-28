@@ -12,6 +12,7 @@ module.exports.init = function (endpoint, token){
     let apps = require ('./api-calls/applications')(httpService.http);
     let deploy = require ('./api-calls/deploy')(httpService.http);
     let settings = require ('./api-calls/settings')(httpService.http);
+    let projects = require ('./project/project');
     //EXISTA DACA E NEVOIE let projects = require ('./api-calls/projects')(httpService.http);
     if (token){
         httpService.setToken (token);
@@ -24,7 +25,8 @@ module.exports.init = function (endpoint, token){
         deploy: deploy,
         settings: settings,
         deploymentTypes: ['beta', 'production', 'development'],
-        deploymentNetwork: ['default', 'host']
+        deploymentNetwork: ['default', 'host'],
+        project: projects
     };
     return calls;
 }
