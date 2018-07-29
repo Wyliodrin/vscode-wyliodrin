@@ -28,6 +28,9 @@
         "onCommand:wylio.product_schedule",
         "onCommand:wylio.product_unschedule",
         "onCommand:wylio.project_init",
+        "onCommand:wylio.project_build",
+        "onCommand:wylio.project_publish",
+        "onCommand:wylio.project_run",
         "onCommand:wylio.login",
         "onCommand:wylio.logout",
         "onCommand:wylio.profile_delete"
@@ -121,6 +124,21 @@
                 "category": "Wylio"
             },
             {
+                "command": "wylio.project_build",
+                "title": "Build project",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.project_publish",
+                "title": "Publish project",
+                "category": "Wylio"
+            },
+            {
+                "command": "wylio.project_run",
+                "title": "Run project",
+                "category": "Wylio"
+            },
+            {
                 "command": "wylio.login",
                 "title": "Log in or select profile",
                 "category": "Wylio"
@@ -155,8 +173,10 @@
         "axios": "^0.18.0",
         "fs-extra": "^7.0.0",
         "lodash": "^4.17.10",
+        "msgpack5": "^4.2.0",
         "mustache": "^2.3.0",
         "semver": "^5.5.0",
-        "uuid": "^3.3.2"
+        "uuid": "^3.3.2",
+        "ws": "^6.0.0"
     }
 }

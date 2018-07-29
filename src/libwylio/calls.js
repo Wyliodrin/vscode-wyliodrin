@@ -13,7 +13,7 @@ module.exports.init = function (endpoint, token){
     let deploy = require ('./api-calls/deploy')(httpService.http);
     let settings = require ('./api-calls/settings')(httpService.http);
     let projectApi = require ('./api-calls/settings')(httpService.http);
-    let projects = require ('./project/project')(users,apps, projectApi);
+    let projects = require ('./project/project')(users, apps, projectApi, settings, products);
     //EXISTA DACA E NEVOIE let projects = require ('./api-calls/projects')(httpService.http);
     if (token){
         httpService.setToken (token);

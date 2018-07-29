@@ -1,13 +1,4 @@
 module.exports = function (http){
-    function search (myPath){
-        let files = fs.readdirSync (myPath);
-        if (files.indexOf('wylio.json') != -1)
-            return fs.readFileSync (path.join (myPath, 'wylio.json'))
-        else if (myPath === path.join (myPath, '..'))
-            return null;
-        else
-            search (path.join (myPath, '..'));
-    }
     return {
         list: async function (){
             let response = await http.get ('/project/list');
