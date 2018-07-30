@@ -161,8 +161,14 @@ vscode.commands.registerCommand ('wylio.project_run', async ()=>{
                             });
                             let product = await vscode.window.showQuickPick (productList, {canPickMany: false});
                             if (product){
-                                let result = await api.project.run (product.description, currentProfile, workspace);
-                                console.log (result);
+                                console.log (JSON.stringify(currentProfile));
+                                let productId = product.description;
+                                let terminal = vscode.window.createTerminal({
+                                    env: {'USER': JSON.stringify(currentProfile)},
+                                    cwd: workspace
+                                });
+                                terminal.show ();
+                                terminal.sendText ('wylio project run '+ productId);
                             }
                         }
                     }
